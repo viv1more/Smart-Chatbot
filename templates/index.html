@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#212121">
+    <title>Smart Chatbot</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Syntax highlighting theme -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+            <button class="icon-button brand-button" id="brand-button"
+                    title="Expand or collapse sidebar" aria-label="Toggle sidebar">
+                ✦
+            </button>
+            <button class="icon-button" id="sidebar-toggle"
+                    title="Collapse sidebar" aria-label="Collapse sidebar">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                    <path d="M9 4v16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <button class="new-chat-button" id="new-chat">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            <span>New chat</span>
+            <span class="shortcut">Ctrl K</span>
+        </button>
+
+        <div class="sidebar-section">
+            <p class="sidebar-label">YOUR ASSISTANT</p>
+            <div class="sidebar-info">
+                <div class="model-icon">✦</div>
+                <div class="sidebar-info-text">
+                    <strong>Smart Chatbot</strong>
+                    <span>Runs locally with Ollama</span>
+                </div>
+                <span class="online-dot" title="Local assistant"></span>
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="local-card">
+                <div class="local-card-icon">⌘</div>
+                <div>
+                    <strong>Local AI mode</strong>
+                    <p>Your prompts are processed by your local Ollama server.</p>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <span class="online-dot"></span>
+                <span>Local model</span>
+                <span class="footer-version">Qwen · 2B</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-panel">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="icon-button mobile-menu" id="mobile-menu"
+                        aria-label="Open menu" title="Open menu">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <div class="topbar-title">
+                    <span class="topbar-name">Smart Chatbot</span>
+                    <span class="topbar-model">Local AI <span>⌄</span></span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="connection-status">
+                    <span class="online-dot"></span>
+                    <span>Local mode</span>
+                </div>
+                <button class="icon-button" id="theme-toggle"
+                        aria-label="Switch theme" title="Switch theme">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <section class="chat-area" id="chat-area">
+            <div class="welcome-screen" id="welcome-screen">
+                <div class="welcome-symbol">✦</div>
+                <p class="eyebrow">YOUR PERSONAL AI</p>
+                <h1>What can I help with?</h1>
+                <p class="welcome-description">
+                    Ask a question, explore an idea, or work through a problem.
+                </p>
+
+                <div class="suggestion-grid">
+                    <button class="suggestion-card"
+                            data-prompt="Explain machine learning in simple words with a real-world example.">
+                        <span class="suggestion-icon purple">✳</span>
+                        <span class="suggestion-copy">
+                            <strong>Learn something</strong>
+                            <small>Explain a concept simply</small>
+                        </span>
+                        <span class="suggestion-arrow">↗</span>
+                    </button>
+
+                    <button class="suggestion-card"
+                            data-prompt="Write a Python program and explain how it works.">
+                        <span class="suggestion-icon blue">{ }</span>
+                        <span class="suggestion-copy">
+                            <strong>Write some code</strong>
+                            <small>Build or debug a program</small>
+                        </span>
+                        <span class="suggestion-arrow">↗</span>
+                    </button>
+
+                    <button class="suggestion-card"
+                            data-prompt="Give me five creative project ideas using AI and data science.">
+                        <span class="suggestion-icon orange">✧</span>
+                        <span class="suggestion-copy">
+                            <strong>Brainstorm ideas</strong>
+                            <small>Find a new direction</small>
+                        </span>
+                        <span class="suggestion-arrow">↗</span>
+                    </button>
+
+                    <button class="suggestion-card"
+                            data-prompt="Help me plan my day with a practical schedule.">
+                        <span class="suggestion-icon green">◷</span>
+                        <span class="suggestion-copy">
+                            <strong>Plan my day</strong>
+                            <small>Organize tasks and priorities</small>
+                        </span>
+                        <span class="suggestion-arrow">↗</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="messages" id="messages" aria-live="polite"></div>
+        </section>
+
+        <section class="composer-section">
+            <form class="composer" id="chat-form">
+                <textarea id="message-input" name="message"
+                          rows="1" maxlength="4000"
+                          placeholder="Message your AI..."
+                          aria-label="Message your AI"
+                          autocomplete="off" required></textarea>
+
+                <div class="composer-bottom">
+                    <div class="composer-meta">
+                        <span class="composer-model-dot"></span>
+                        <span>Qwen · Local</span>
+                    </div>
+
+                    <div class="composer-actions">
+                        <span class="keyboard-hint">Enter to send</span>
+                        <button class="send-button" id="send-button"
+                                type="submit" aria-label="Send message">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 19V5M5 12l7-7 7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <p class="disclaimer">
+                AI can make mistakes. Verify important information.
+            </p>
+        </section>
+    </main>
+</div>
+
+<div class="mobile-overlay" id="mobile-overlay"></div>
+
+<!-- Markdown parser -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- HTML sanitizer: important when rendering AI-generated HTML -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.6/purify.min.js"></script>
+<!-- Code syntax highlighter -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
