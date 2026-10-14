@@ -62,7 +62,7 @@ Smart-Chatbot/
 1. Clone the repository:
 
    ```bash
-   git clone YOUR_GITHUB_REPOSITORY_URL
+   git clone https://github.com/viv1more/Smart-Chatbot
    cd Smart-Chatbot
    ```
 
